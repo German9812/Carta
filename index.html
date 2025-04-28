@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Jessica Andrea Jaramillo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Poppins:wght@300;400;600&display=swap');
+        
+        :root {
+            --text-color: #e6f1ff;
+            --accent-color: #64ffda;
+            --background-color: #000000;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: var(--background-color);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: var(--text-color);
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            z-index: 10;
+            padding-top: 20px;
+        }
+
+        /* Estrellas de fondo más brillantes */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Estrellas fugaces mejoradas */
+        .shooting-star {
+            position: absolute;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .shooting-star .star-head {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.9);
+        }
+
+        .shooting-star .star-tail {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+            transform-origin: right center;
+        }
+
+        /* Mensajes más discretos */
+        .message {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.5s ease;
+            max-width: 80%;
+            z-index: 10;
+            margin-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .message h1 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .message p {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            font-weight: 300;
+        }
+
+        .message.show {
+            opacity: 0.8;
+            transform: translateY(0);
+        }
+
+        /* Sistema Tierra-Luna mejorado */
+        .space-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            perspective: 1000px;
+            z-index: 2;
+        }
+
+        .earth-moon-system {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-style: preserve-3d;
+            transform: translate(-50%, -50%);
+            animation: systemFloat 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes systemFloat {
+            0% { transform: translate(-50%, -50%) translateZ(0) rotateX(0deg); }
+            100% { transform: translate(-50%, -50%) translateZ(50px) rotateX(5deg); }
+        }
+
+        .earth-container {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            transform-style: preserve-3d;
+            top: 0;
+            left: 0;
+        }
+
+        .earth-video-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            top: 0;
+            left: 0;
+        }
+
+        .earth-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+        }
+
+        .earth-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: inset 10px 0 40px rgba(0, 0, 0, 0.5),
+                       -80px 15px 80px 10px rgba(0,0,0,0.4) inset,
+                       0 0 80px rgba(100, 180, 255, 0.8);
+            pointer-events: none;
+            top: 0;
+            left: 0;
+        }
+
+        .clouds {
+            position: absolute;
+            width: 310px;
+            height: 310px;
+            border-radius: 50%;
+            background-image: url('https://www.transparenttextures.com/patterns/cloudy-day.png');
+            background-size: 600px 600px;
+            opacity: 0.3;
+            animation: cloudsRotate 20s linear infinite;
+            top: -5px;
+            left: -5px;
+        }
+
+        .moon-orbit {
+            position: absolute;
+            width: 450px; /* Reducido para que la luna esté más cerca */
+            height: 450px;
+            top: 50%;
+            left: 50%;
+            margin-top: -225px; /* Mitad del tamaño */
+            margin-left: -225px; /* Mitad del tamaño */
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: moonOrbit 30s linear infinite;
+        }
+
+        .moon {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            margin-top: -40px; /* Mitad del tamaño */
+            margin-left: -40px; /* Mitad del tamaño */
+            border-radius: 50%;
+            background-image: url('https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_1k.jpg');
+            background-size: 160px 80px;
+            box-shadow: inset 5px -5px 15px rgba(0, 0, 0, 0.4),
+                       0 0 30px rgba(200, 200, 200, 0.6);
+            animation: moonRotate 30s linear infinite;
+        }
+        
+        .moon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: -20px 10px 35px 5px rgba(0,0,0,0.9) inset;
+            opacity: 0.5;
+        }
+
+        @keyframes moonOrbit {
+            0% { transform: rotateZ(0deg); }
+            100% { transform: rotateZ(360deg); }
+        }
+
+        @keyframes moonRotate {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 160px 0px; }
+        }
+
+       /* Contador de tiempo en esquina - Versión mejorada */
+       .time-counter {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 2s ease;
+        z-index: 10;
+        border-radius: 15px;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        max-width: 90%;
+    }
+    
+    .time-counter.show {
+        opacity: 1;
+    }
+    
+    .time-wrapper {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .time-title {
+        color: var(--accent-color);
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+    
+    .time-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 70px;
+        padding: 10px;
+        background: rgba(100, 255, 218, 0.1);
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+    }
+    
+    .time-group:hover {
+        transform: translateY(-2px);
+    }
+    
+    .time-value {
+        font-size: 1.8rem;
+        color: var(--text-color);
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    
+    .time-label {
+        font-size: 0.7rem;
+        color: var(--accent-color);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    /* Estilos responsivos actualizados */
+    @media (max-width: 768px) {
+        .time-counter {
+            bottom: 15px;
+            right: 15px;
+            padding: 12px;
+        }
+    
+        .time-wrapper {
+            gap: 10px;
+        }
+    
+        .time-group {
+            min-width: 60px;
+            padding: 8px;
+        }
+    
+        .time-value {
+            font-size: 1.5rem;
+        }
+    
+        .time-title {
+            font-size: 0.8rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .time-counter {
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            padding: 10px;
+        }
+    
+        .time-wrapper {
+            gap: 8px;
+        }
+    
+        .time-group {
+            min-width: 50px;
+            padding: 6px;
+        }
+    
+        .time-value {
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+        }
+    
+        .time-label {
+            font-size: 0.6rem;
+        }
+    
+        .time-title {
+            font-size: 0.75rem;
+            margin-top: 5px;
+        }
+    }
+        
+        /* Animación para estrellas fugaces */
+        @keyframes shootingStar {
+            0% {
+                opacity: 0;
+            }
+            5% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--travel-x), var(--travel-y));
+                opacity: 0;
+            }
+        }
+        
+        /* Responsive mejorado */
+        @media (max-width: 1024px) {
+            .earth-video-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .clouds {
+                width: 260px;
+                height: 260px;
+            }
+            
+            .moon-orbit {
+                width: 350px;
+                height: 350px;
+                margin-top: -175px;
+                margin-left: -175px;
+            }
+            
+            .moon {
+                width: 70px;
+                height: 70px;
+                background-size: 140px 70px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .message {
+                max-width: 90%;
+                padding: 12px;
+            }
+            
+            .message h1 {
+                font-size: 1.5rem;
+                margin-bottom: 12px;
+            }
+            
+            .message p {
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+            
+            .earth-video-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .clouds {
+                width: 210px;
+                height: 210px;
+            }
+            
+            .moon-orbit {
+                width: 300px;
+                height: 300px;
+                margin-top: -150px;
+                margin-left: -150px;
+            }
+            
+            .moon {
+                width: 50px;
+                height: 50px;
+                background-size: 100px 50px;
+            }
+            
+            .time-counter {
+                bottom: 15px;
+                right: 15px;
+                font-size: 1rem;
+                padding: 12px;
+                gap: 10px;
+            }
+            
+            .time-counter p {
+                font-size: 0.9rem;
+                margin-right: 10px;
+            }
+            
+            .time-counter .time-value {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .earth-video-container {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .clouds {
+                width: 190px;
+                height: 190px;
+            }
+            
+            .moon-orbit {
+                width: 250px;
+                height: 250px;
+                margin-top: -125px;
+                margin-left: -125px;
+            }
+            
+            .moon {
+                width: 40px;
+                height: 40px;
+                background-size: 80px 40px;
+            }
+
+            .message {
+                padding: 10px;
+            }
+            
+            .message h1 {
+                font-size: 1.3rem;
+            }
+            
+            .message p {
+                font-size: 0.8rem;
+            }
+            
+            .time-counter {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 5px;
+                padding: 10px;
+            }
+            
+            .time-counter p {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+            
+            .time-counter div {
+                flex-direction: row;
+                align-items: center;
+                padding: 5px 8px;
+            }
+            
+            .time-counter .time-value {
+                margin-bottom: 0;
+                margin-right: 5px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="space-container">
+        <div class="earth-moon-system">
+            <div class="earth-container">
+                <div class="earth-video-container">
+                    <video class="earth-video" autoplay loop muted playsinline>
+                        <source src="tierra-girando.mp4" type="video/mp4">
+                        Tu navegador no soporta el elemento de video.
+                    </video>
+                    <div class="earth-overlay"></div>
+                </div>
+                <div class="clouds"></div>
+            </div>
+            
+            <div class="moon-orbit">
+                <div class="moon"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="message" id="message">
+            <h1>Jessica Andrea Jaramillo</h1>
+            <p>En este universo infinito, encontrarte fue el milagro más grande,
+                y cada día a tu lado es un regalo que atesoro con todo mi corazón.</p>
+                <p>Eres mi tierra, mi luna y todas mis estrellas.<br>
+                Cada momento contigo es mágico y especial.</p>
+                <p>Gracias por ser quien eres y por iluminar mi vida.</p>
+        </div>
+        
+        <div class="time-counter" id="timeCounter">
+            <div class="time-wrapper">
+                <div class="time-group">
+                    <span id="days" class="time-value">00</span>
+                    <span class="time-label">Días</span>
+                </div>
+                <div class="time-group">
+                    <span id="hours" class="time-value">00</span>
+                    <span class="time-label">Horas</span>
+                </div>
+                <div class="time-group">
+                    <span id="minutes" class="time-value">00</span>
+                    <span class="time-label">Minutos</span>
+                </div>
+                <div class="time-group">
+                    <span id="seconds" class="time-value">00</span>
+                    <span class="time-label">Segundos</span>
+                </div>
+            </div>
+            <p class="time-title">Tiempo que iluminaste mi vida</p>
+        </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const earthVideo = document.querySelector('.earth-video');
+            
+            // Intenta reproducir el video
+            function attemptPlay() {
+                earthVideo.play().catch(error => {
+                    console.log('Auto-play prevented:', error);
+                });
+            }
+            
+            document.body.addEventListener('click', attemptPlay, { once: true });
+            
+            // Configuración del video
+            earthVideo.loop = true;
+            earthVideo.muted = true;
+            earthVideo.playsInline = true;
+
+            // Fecha de inicio (ajusta esta fecha a cuando conociste a tu pareja)
+            const startDate = new Date('2023-10-23T00:00:00'); // Cambia esta fecha
+            
+            // Crear estrellas de fondo
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 1000;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                const variant = Math.random();
+                let size, opacity;
+                
+                if (variant < 0.6) {
+                    size = 0.5 + Math.random() * 1;
+                    opacity = 0.5 + Math.random() * 0.4;
+                } else if (variant < 0.9) {
+                    size = 1.5 + Math.random() * 1;
+                    opacity = 0.7 + Math.random() * 0.3;
+                } else {
+                    size = 2 + Math.random() * 1.5;
+                    opacity = 0.9 + Math.random() * 0.1;
+                }
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const duration = 2 + Math.random() * 6 + 's';
+                const delay = Math.random() * 5 + 's';
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.opacity = opacity.toString();
+                star.style.setProperty('--duration', duration);
+                star.style.animationDelay = delay;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            // Crear estrellas fugaces
+            function createShootingStar() {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                
+                const starHead = document.createElement('div');
+                starHead.classList.add('star-head');
+                
+                const starTail = document.createElement('div');
+                starTail.classList.add('star-tail');
+                
+                shootingStar.appendChild(starHead);
+                shootingStar.appendChild(starTail);
+                
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * (window.innerHeight * 0.4);
+                
+                const angle = 20 + Math.random() * 40;
+                const distance = 400 + Math.random() * 600;
+                const duration = 1.5 + Math.random() * 2;
+                
+                const radians = angle * Math.PI / 180;
+                const destX = distance * Math.cos(radians);
+                const destY = distance * Math.sin(radians);
+                
+                const tailLength = 60 + Math.random() * 100;
+                
+                starHead.style.top = '0';
+                starHead.style.left = '0';
+                
+                starTail.style.width = `${tailLength}px`;
+                starTail.style.top = '1px';
+                starTail.style.right = '0';
+                starTail.style.transform = `rotate(${angle}deg)`;
+                
+                shootingStar.style.left = `${startX}px`;
+                shootingStar.style.top = `${startY}px`;
+                shootingStar.style.transform = 'translate3d(0, 0, 0)';
+                shootingStar.style.setProperty('--travel-x', `${destX}px`);
+                shootingStar.style.setProperty('--travel-y', `${destY}px`);
+                shootingStar.style.animation = `shootingStar ${duration}s linear forwards`;
+                
+                document.body.appendChild(shootingStar);
+                
+                setTimeout(() => {
+                    shootingStar.remove();
+                }, duration * 1000);
+            }
+            
+            // Mostrar elementos con retraso
+            setTimeout(() => {
+                document.getElementById('message').classList.add('show');
+                document.getElementById('timeCounter').classList.add('show');
+            }, 1000);
+            
+            // Actualizar contador de tiempo
+            function updateTimeCounter() {
+                const now = new Date();
+                const diff = now - startDate;
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = Math.floor(hours).toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            // Iniciar contador
+            updateTimeCounter();
+            setInterval(updateTimeCounter, 1000);
+            
+            // Crear estrellas fugaces periódicamente
+            setInterval(createShootingStar, 3000);
+            
+            // Ajustar al redimensionar
+            window.addEventListener('resize', function() {
+                const earthMoonSystem = document.querySelector('.earth-moon-system');
+                earthMoonSystem.style.left = '50%';
+                earthMoonSystem.style.top = '50%';
+            });
+        });
+    </script>
+</body>
+</html>
