@@ -38,14 +38,14 @@
             padding-top: 20px;
         }
 
-        /* Estrellas de fondo más brillantes */
+        /* Estrellas de fondo */
         .stars {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            z-index: 0;
         }
 
         .star {
@@ -53,14 +53,27 @@
             background-color: #fff;
             border-radius: 50%;
             animation: twinkle var(--duration) infinite ease-in-out;
+            box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Estrellas brillantes */
+        .star.bright {
+            box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.7), 
+                        0 0 8px 2px rgba(200, 220, 255, 0.3);
+            animation: brightTwinkle var(--duration) infinite ease-in-out;
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
         }
 
-        /* Estrellas fugaces mejoradas */
+        @keyframes brightTwinkle {
+            0%, 100% { opacity: 0.5; transform: scale(1); box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.7); }
+            50% { opacity: 0.9; transform: scale(1.2); box-shadow: 0 0 8px 2px rgba(200, 220, 255, 0.7), 0 0 10px 4px rgba(180, 220, 255, 0.4); }
+        }
+
+        /* Estrellas fugaces */
         .shooting-star {
             position: absolute;
             z-index: 2;
@@ -69,26 +82,111 @@
 
         .shooting-star .star-head {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 5px;
+            height: 5px;
             background-color: white;
             border-radius: 50%;
-            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.7),
+                        0 0 20px 6px rgba(200, 220, 255, 0.3);
         }
 
         .shooting-star .star-tail {
             position: absolute;
             height: 3px;
-            background: linear-gradient(to left, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
+            background: linear-gradient(to left, 
+                rgba(255, 255, 255, 0), 
+                rgba(255, 255, 255, 0.7) 20%, 
+                rgba(220, 240, 255, 0.5) 50%, 
+                rgba(200, 220, 255, 0.2) 80%, 
+                rgba(255, 255, 255, 0));
             transform-origin: right center;
         }
 
-        /* Mensajes más discretos */
+        /* Estrella fugaz especial para el contador */
+        .counter-shooting-star {
+            position: absolute;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .counter-shooting-star .star-head {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 15px 5px rgba(100, 255, 218, 0.8),
+                       0 0 25px 10px rgba(100, 255, 218, 0.4);
+        }
+
+        .counter-shooting-star .star-tail {
+            position: absolute;
+            height: 5px;
+            background: linear-gradient(to left, 
+                rgba(100, 255, 218, 0), 
+                rgba(100, 255, 218, 0.8) 20%, 
+                rgba(100, 255, 218, 0.6) 50%, 
+                rgba(100, 255, 218, 0.3) 80%, 
+                rgba(100, 255, 218, 0));
+            transform-origin: right center;
+        }
+
+        @keyframes counterStar {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 0, 0);
+            }
+            10% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate3d(var(--travel-x), var(--travel-y), 0);
+                opacity: 0;
+            }
+        }
+        
+        /* Explosión de la estrella fugaz */
+        .star-explosion {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(100, 255, 218, 0.8) 0%, 
+                rgba(100, 255, 218, 0.5) 30%, 
+                rgba(100, 255, 218, 0.2) 60%, 
+                rgba(100, 255, 218, 0) 100%);
+            z-index: 14;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        @keyframes explode {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+            }
+        }
+
+        /* Mensajes con efecto de escritura */
         .message {
             text-align: center;
             opacity: 0;
             transform: translateY(30px);
-            transition: all 1.5s ease;
+            transition: opacity 1s ease, transform 1s ease;
             max-width: 80%;
             z-index: 10;
             margin-bottom: 20px;
@@ -105,6 +203,10 @@
             color: var(--accent-color);
             font-weight: 600;
             letter-spacing: 1px;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0;
+            transition: width 2s ease-in-out;
         }
 
         .message p {
@@ -113,14 +215,44 @@
             margin-bottom: 10px;
             color: var(--text-color);
             font-weight: 300;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.5s ease, opacity 1s ease, margin-bottom 0.5s ease;
+        }
+
+        .message p.visible {
+            opacity: 1;
+            height: auto;
+            margin-bottom: 10px;
         }
 
         .message.show {
-            opacity: 0.8;
+            opacity: 1;
             transform: translateY(0);
         }
+        
+        .message h1.typing {
+            width: 100%;
+        }
 
-        /* Sistema Tierra-Luna mejorado */
+        /* Cursor de escritura */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: var(--accent-color);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Sistema Tierra-Luna */
         .space-container {
             position: fixed;
             top: 0;
@@ -138,6 +270,7 @@
             transform-style: preserve-3d;
             transform: translate(-50%, -50%);
             animation: systemFloat 20s infinite alternate ease-in-out;
+            z-index: 3;
         }
 
         @keyframes systemFloat {
@@ -172,14 +305,13 @@
             object-position: center center;
         }
 
+        /* Sombra estática para la Tierra */
         .earth-overlay {
             position: absolute;
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            box-shadow: inset 10px 0 40px rgba(0, 0, 0, 0.5),
-                       -80px 15px 80px 10px rgba(0,0,0,0.4) inset,
-                       0 0 80px rgba(100, 180, 255, 0.8);
+            box-shadow: inset 20px -10px 50px rgba(0, 0, 0, 0.7);
             pointer-events: none;
             top: 0;
             left: 0;
@@ -198,14 +330,20 @@
             left: -5px;
         }
 
+        @keyframes cloudsRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Órbita de la luna más cercana a la tierra */
         .moon-orbit {
             position: absolute;
-            width: 450px; /* Reducido para que la luna esté más cerca */
-            height: 450px;
+            width: 310px; /* Órbita más cercana a la tierra */
+            height: 310px;
             top: 50%;
             left: 50%;
-            margin-top: -225px; /* Mitad del tamaño */
-            margin-left: -225px; /* Mitad del tamaño */
+            margin-top: -155px; /* Mitad del tamaño */
+            margin-left: -155px; /* Mitad del tamaño */
             border-radius: 50%;
             transform-style: preserve-3d;
             animation: moonOrbit 30s linear infinite;
@@ -215,16 +353,18 @@
             position: absolute;
             top: 50%;
             left: 0;
-            width: 80px;
-            height: 80px;
-            margin-top: -40px; /* Mitad del tamaño */
-            margin-left: -40px; /* Mitad del tamaño */
+            width: 65px; /* Tamaño ajustado */
+            height: 65px; /* Tamaño ajustado */
+            margin-top: -32.5px; /* Mitad del tamaño */
+            margin-left: -32.5px; /* Mitad del tamaño */
             border-radius: 50%;
-            background-image: url('https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_1k.jpg');
-            background-size: 160px 80px;
+            background-image: url('2k_moon.jpg');
+            background-size: 130px 65px;
             box-shadow: inset 5px -5px 15px rgba(0, 0, 0, 0.4),
-                       0 0 30px rgba(200, 200, 200, 0.6);
+                      0 0 30px rgba(200, 200, 200, 0.6);
             animation: moonRotate 30s linear infinite;
+            transform-style: preserve-3d;
+            z-index: 4;
         }
         
         .moon::after {
@@ -244,131 +384,75 @@
 
         @keyframes moonRotate {
             0% { background-position: 0px 0px; }
-            100% { background-position: 160px 0px; }
+            100% { background-position: 130px 0px; }
         }
 
-       /* Contador de tiempo en esquina - Versión mejorada */
+       /* Contador de tiempo en esquina */
        .time-counter {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        text-align: center;
-        opacity: 0;
-        transition: opacity 2s ease;
-        z-index: 10;
-        border-radius: 15px;
-        padding: 15px;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        max-width: 90%;
-    }
-    
-    .time-counter.show {
-        opacity: 1;
-    }
-    
-    .time-wrapper {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-bottom: 10px;
-    }
-    
-    .time-title {
-        color: var(--accent-color);
-        margin: 0;
-        font-size: 0.9rem;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-    }
-    
-    .time-group {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-width: 70px;
-        padding: 10px;
-        background: rgba(100, 255, 218, 0.1);
-        border-radius: 10px;
-        transition: transform 0.3s ease;
-    }
-    
-    .time-group:hover {
-        transform: translateY(-2px);
-    }
-    
-    .time-value {
-        font-size: 1.8rem;
-        color: var(--text-color);
-        font-weight: 600;
-        margin-bottom: 5px;
-    }
-    
-    .time-label {
-        font-size: 0.7rem;
-        color: var(--accent-color);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    /* Estilos responsivos actualizados */
-    @media (max-width: 768px) {
-        .time-counter {
-            bottom: 15px;
-            right: 15px;
-            padding: 12px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            z-index: 10;
+            border-radius: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+            transform: scale(0.5);
         }
-    
+        
+        .time-counter.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
         .time-wrapper {
-            gap: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
         }
-    
-        .time-group {
-            min-width: 60px;
-            padding: 8px;
-        }
-    
-        .time-value {
-            font-size: 1.5rem;
-        }
-    
+        
         .time-title {
-            font-size: 0.8rem;
+            color: var(--accent-color);
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
-    }
-    
-    @media (max-width: 480px) {
-        .time-counter {
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
+        
+        .time-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 70px;
             padding: 10px;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
         }
-    
-        .time-wrapper {
-            gap: 8px;
+        
+        .time-group:hover {
+            transform: translateY(-2px);
         }
-    
-        .time-group {
-            min-width: 50px;
-            padding: 6px;
-        }
-    
+        
         .time-value {
-            font-size: 1.2rem;
-            margin-bottom: 3px;
+            font-size: 1.8rem;
+            color: var(--text-color);
+            font-weight: 600;
+            margin-bottom: 5px;
         }
-    
+        
         .time-label {
-            font-size: 0.6rem;
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-    
-        .time-title {
-            font-size: 0.75rem;
-            margin-top: 5px;
-        }
-    }
         
         /* Animación para estrellas fugaces */
         @keyframes shootingStar {
@@ -400,16 +484,16 @@
             }
             
             .moon-orbit {
-                width: 350px;
-                height: 350px;
-                margin-top: -175px;
-                margin-left: -175px;
+                width: 280px; /* Acercada más en pantallas medianas */
+                height: 280px;
+                margin-top: -140px;
+                margin-left: -140px;
             }
             
             .moon {
-                width: 70px;
-                height: 70px;
-                background-size: 140px 70px;
+                width: 60px;
+                height: 60px;
+                background-size: 120px 60px;
             }
         }
         
@@ -440,10 +524,10 @@
             }
             
             .moon-orbit {
-                width: 300px;
-                height: 300px;
-                margin-top: -150px;
-                margin-left: -150px;
+                width: 240px; /* Acercada más en tablets */
+                height: 240px;
+                margin-top: -120px;
+                margin-left: -120px;
             }
             
             .moon {
@@ -455,18 +539,24 @@
             .time-counter {
                 bottom: 15px;
                 right: 15px;
-                font-size: 1rem;
                 padding: 12px;
+            }
+            
+            .time-wrapper {
                 gap: 10px;
             }
             
-            .time-counter p {
-                font-size: 0.9rem;
-                margin-right: 10px;
+            .time-group {
+                min-width: 60px;
+                padding: 8px;
             }
             
-            .time-counter .time-value {
-                font-size: 1.1rem;
+            .time-value {
+                font-size: 1.5rem;
+            }
+            
+            .time-title {
+                font-size: 0.8rem;
             }
         }
 
@@ -482,10 +572,10 @@
             }
             
             .moon-orbit {
-                width: 250px;
-                height: 250px;
-                margin-top: -125px;
-                margin-left: -125px;
+                width: 220px; /* Acercada más en móviles */
+                height: 220px;
+                margin-top: -110px;
+                margin-left: -110px;
             }
             
             .moon {
@@ -507,27 +597,29 @@
             }
             
             .time-counter {
-                flex-direction: column;
-                align-items: flex-end;
-                gap: 5px;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
                 padding: 10px;
             }
             
-            .time-counter p {
-                margin-right: 0;
-                margin-bottom: 5px;
+            .time-group {
+                min-width: 50px;
+                padding: 6px;
             }
             
-            .time-counter div {
-                flex-direction: row;
-                align-items: center;
-                padding: 5px 8px;
+            .time-value {
+                font-size: 1.2rem;
+                margin-bottom: 3px;
             }
             
-            .time-counter .time-value {
-                margin-bottom: 0;
-                margin-right: 5px;
-                font-size: 1rem;
+            .time-label {
+                font-size: 0.6rem;
+            }
+            
+            .time-title {
+                font-size: 0.75rem;
+                margin-top: 5px;
             }
         }
     </style>
@@ -535,6 +627,7 @@
 <body>
     <div class="stars" id="stars"></div>
     
+    <!-- Sistema Tierra-Luna con la luna más cercana -->
     <div class="space-container">
         <div class="earth-moon-system">
             <div class="earth-container">
@@ -543,25 +636,25 @@
                         <source src="tierra-girando.mp4" type="video/mp4">
                         Tu navegador no soporta el elemento de video.
                     </video>
-                    <div class="earth-overlay"></div>
+                    <div class="earth-overlay" id="earth-overlay"></div>
                 </div>
                 <div class="clouds"></div>
             </div>
             
             <div class="moon-orbit">
-                <div class="moon"></div>
+                <div class="moon" id="moon"></div>
             </div>
         </div>
     </div>
     
     <div class="container">
         <div class="message" id="message">
-            <h1>Jessica Andrea Jaramillo</h1>
-            <p>En este universo infinito, encontrarte fue el milagro más grande,
+            <h1 id="title">Jessica Andrea Jaramillo<span class="typing-cursor" id="cursor"></span></h1>
+            <p id="p1">En este universo infinito, encontrarte fue el milagro más grande,
                 y cada día a tu lado es un regalo que atesoro con todo mi corazón.</p>
-                <p>Eres mi tierra, mi luna y todas mis estrellas.<br>
+            <p id="p2">Eres mi tierra, mi luna y todas mis estrellas.<br>
                 Cada momento contigo es mágico y especial.</p>
-                <p>Gracias por ser quien eres y por iluminar mi vida.</p>
+            <p id="p3">Gracias por ser quien eres y por iluminar mi vida.</p>
         </div>
         
         <div class="time-counter" id="timeCounter">
@@ -585,64 +678,114 @@
             </div>
             <p class="time-title">Tiempo desde que iluminaste mi vida</p>
         </div>
-
+    </div>
+    
+    <!-- Audio elementos -->
+    <audio id="typingSound" preload="auto">
+        <source src="https://assets.codepen.io/21542/typeWriterSound.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Audio para música de fondo -->
+    <audio id="backgroundMusic" loop>
+        <source src="micancion.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const earthVideo = document.querySelector('.earth-video');
+            const messageContainer = document.getElementById('message');
+            const titleEl = document.getElementById('title');
+            const cursorEl = document.getElementById('cursor');
+            const p1 = document.getElementById('p1');
+            const p2 = document.getElementById('p2');
+            const p3 = document.getElementById('p3');
+            const typingSound = document.getElementById('typingSound');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const timeCounter = document.getElementById('timeCounter');
             
-            // Intenta reproducir el video
-            function attemptPlay() {
-                earthVideo.play().catch(error => {
-                    console.log('Auto-play prevented:', error);
-                });
+            // Intenta reproducir el video de la tierra
+            function attemptPlayEarthVideo() {
+                if (earthVideo) {
+                    earthVideo.play().catch(error => {
+                        console.log('Earth video auto-play prevented:', error);
+                    });
+                }
             }
             
-            document.body.addEventListener('click', attemptPlay, { once: true });
+            // Intentar reproducir al cargar y también al hacer clic
+            attemptPlayEarthVideo();
+            document.body.addEventListener('click', attemptPlayEarthVideo);
+            document.body.addEventListener('touchstart', attemptPlayEarthVideo, {once: true});
             
-            // Configuración del video
-            earthVideo.loop = true;
-            earthVideo.muted = true;
-            earthVideo.playsInline = true;
+            // Configuración del video de la tierra
+            if (earthVideo) {
+                earthVideo.loop = true;
+                earthVideo.muted = true;
+                earthVideo.playsInline = true;
+            }
 
             // Fecha de inicio (ajusta esta fecha a cuando conociste a tu pareja)
-            const startDate = new Date('2023-10-23T00:00:00'); // Cambia esta fecha
+            const startDate = new Date('2023-10-23T13:00:00'); // Cambia esta fecha
             
             // Crear estrellas de fondo
             const starsContainer = document.getElementById('stars');
             const starsCount = 1000;
             
-            for (let i = 0; i < starsCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                
-                const variant = Math.random();
-                let size, opacity;
-                
-                if (variant < 0.6) {
-                    size = 0.5 + Math.random() * 1;
-                    opacity = 0.5 + Math.random() * 0.4;
-                } else if (variant < 0.9) {
-                    size = 1.5 + Math.random() * 1;
-                    opacity = 0.7 + Math.random() * 0.3;
-                } else {
-                    size = 2 + Math.random() * 1.5;
-                    opacity = 0.9 + Math.random() * 0.1;
+            if (starsContainer) {
+                for (let i = 0; i < starsCount; i++) {
+                    const star = document.createElement('div');
+                    star.classList.add('star');
+                    
+                    const variant = Math.random();
+                    let size, opacity;
+                    
+                    // Configuración de tamaño y brillo de las estrellas
+                    if (variant < 0.65) {
+                        size = 0.3 + Math.random() * 0.8;  // Estrellas más pequeñas
+                        opacity = 0.4 + Math.random() * 0.3; // Menos brillantes
+                    } else if (variant < 0.9) {
+                        size = 1.0 + Math.random() * 0.8;  // Tamaño medio
+                        opacity = 0.5 + Math.random() * 0.3; // Brillo medio
+                    } else {
+                        size = 1.5 + Math.random() * 1.0;  // Más grandes
+                        opacity = 0.7 + Math.random() * 0.2; // Brillo alto
+                        star.classList.add('bright'); // Solo las más grandes son brillantes
+                    }
+                    
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const duration = 2 + Math.random() * 6 + 's';
+                    const delay = Math.random() * 5 + 's';
+                    
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    star.style.left = `${x}%`;
+                    star.style.top = `${y}%`;
+                    star.style.opacity = opacity.toString();
+                    star.style.setProperty('--duration', duration);
+                    star.style.animationDelay = delay;
+                    
+                    starsContainer.appendChild(star);
                 }
-                
-                const x = Math.random() * 100;
-                const y = Math.random() * 100;
-                const duration = 2 + Math.random() * 6 + 's';
-                const delay = Math.random() * 5 + 's';
-                
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.left = `${x}%`;
-                star.style.top = `${y}%`;
-                star.style.opacity = opacity.toString();
-                star.style.setProperty('--duration', duration);
-                star.style.animationDelay = delay;
-                
-                starsContainer.appendChild(star);
+            }
+            
+            // Crear efecto de destello aleatorio para algunas estrellas
+            function createStarTwinkle() {
+                const brightStars = document.querySelectorAll('.star.bright');
+                if (brightStars.length > 0) {
+                    const randomStar = brightStars[Math.floor(Math.random() * brightStars.length)];
+                    
+                    if (randomStar) {
+                        randomStar.style.boxShadow = '0 0 8px 3px rgba(255, 255, 255, 0.7), 0 0 12px 6px rgba(200, 220, 255, 0.4)';
+                        randomStar.style.transform = 'scale(1.3)';
+                        
+                        setTimeout(() => {
+                            randomStar.style.boxShadow = '';
+                            randomStar.style.transform = '';
+                        }, 300);
+                    }
+                }
             }
             
             // Crear estrellas fugaces
@@ -662,15 +805,16 @@
                 const startX = Math.random() * window.innerWidth;
                 const startY = Math.random() * (window.innerHeight * 0.4);
                 
-                const angle = 20 + Math.random() * 40;
-                const distance = 400 + Math.random() * 600;
-                const duration = 1.5 + Math.random() * 2;
+                // Mejorar ángulo y apariencia de las estrellas fugaces
+                const angle = 20 + Math.random() * 60; // Mayor variación del ángulo
+                const distance = 500 + Math.random() * 800; // Mayor distancia recorrida
+                const duration = 1 + Math.random() * 3; // Duración variable
                 
                 const radians = angle * Math.PI / 180;
                 const destX = distance * Math.cos(radians);
                 const destY = distance * Math.sin(radians);
                 
-                const tailLength = 60 + Math.random() * 100;
+                const tailLength = 80 + Math.random() * 120; // Colas
                 
                 starHead.style.top = '0';
                 starHead.style.left = '0';
@@ -694,11 +838,122 @@
                 }, duration * 1000);
             }
             
-            // Mostrar elementos con retraso
-            setTimeout(() => {
-                document.getElementById('message').classList.add('show');
-                document.getElementById('timeCounter').classList.add('show');
-            }, 1000);
+            // Crear efecto de estrella fugaz especial para el contador
+            function createCounterShootingStar() {
+                return new Promise((resolve) => {
+                    const counterRect = timeCounter.getBoundingClientRect();
+                    const counterCenterX = counterRect.left + counterRect.width / 2;
+                    const counterCenterY = counterRect.top + counterRect.height / 2;
+                    
+                    const shootingStar = document.createElement('div');
+                    shootingStar.classList.add('counter-shooting-star');
+                    
+                    const starHead = document.createElement('div');
+                    starHead.classList.add('star-head');
+                    
+                    const starTail = document.createElement('div');
+                    starTail.classList.add('star-tail');
+                    
+                    shootingStar.appendChild(starHead);
+                    shootingStar.appendChild(starTail);
+                    
+                    // Empezar desde arriba a la izquierda
+                    const startX = window.innerWidth * 0.2;
+                    const startY = window.innerHeight * 0.2;
+                    
+                    // Terminar en el contador
+                    const destX = counterCenterX - startX;
+                    const destY = counterCenterY - startY;
+                    
+                    const angle = Math.atan2(destY, destX) * 180 / Math.PI;
+                    const tailLength = 120;
+                    const duration = 2;
+                    
+                    starHead.style.top = '0';
+                    starHead.style.left = '0';
+                    
+                    starTail.style.width = `${tailLength}px`;
+                    starTail.style.top = '2px';
+                    starTail.style.right = '0';
+                    starTail.style.transform = `rotate(${angle}deg)`;
+                    
+                    shootingStar.style.left = `${startX}px`;
+                    shootingStar.style.top = `${startY}px`;
+                    shootingStar.style.transform = 'translate3d(0, 0, 0)';
+                    shootingStar.style.setProperty('--travel-x', `${destX}px`);
+                    shootingStar.style.setProperty('--travel-y', `${destY}px`);
+                    shootingStar.style.animation = `counterStar ${duration}s linear forwards`;
+                    
+                    document.body.appendChild(shootingStar);
+                    
+                    // Crear explosión cuando la estrella llegue al contador
+                    setTimeout(() => {
+                        const explosion = document.createElement('div');
+                        explosion.classList.add('star-explosion');
+                        explosion.style.left = `${counterCenterX}px`;
+                        explosion.style.top = `${counterCenterY}px`;
+                        explosion.style.animation = 'explode 1s ease-out forwards';
+                        
+                        document.body.appendChild(explosion);
+                        
+                        setTimeout(() => {
+                            explosion.remove();
+                            resolve(); // Resolvemos la promesa cuando termine la explosión
+                        }, 1000);
+                    }, duration * 1000 * 0.9); // Un poco antes de que termine la animación de la estrella
+                    
+                    setTimeout(() => {
+                        shootingStar.remove();
+                    }, duration * 1000);
+                });
+            }
+            
+            // Simular efecto de máquina de escribir con sonido
+            function typeWriter(element, text, speed, soundInterval) {
+                return new Promise((resolve) => {
+                    let i = 0;
+                    let soundCounter = 0;
+                    
+                    function type() {
+                        if (i < text.length) {
+                            element.textContent = text.substring(0, i + 1);
+                            i++;
+                            
+                            // Reproducir sonido de tecleo a intervalos
+                            soundCounter++;
+                            if (soundCounter % soundInterval === 0) {
+                                try {
+                                    typingSound.currentTime = 0;
+                                    typingSound.play().catch(e => console.log('Error playing sound:', e));
+                                } catch (e) {
+                                    console.log('Error with typing sound:', e);
+                                }
+                            }
+                            
+                            setTimeout(type, speed);
+                        } else {
+                            resolve();
+                        }
+                    }
+                    
+                    type();
+                });
+            }
+            
+            // Reproducir música de fondo
+            function playBackgroundMusic() {
+                if (backgroundMusic) {
+                    backgroundMusic.volume = 0.5; // Volumen a la mitad
+                    backgroundMusic.play().catch(error => {
+                        console.log('Background music auto-play prevented:', error);
+                        
+                        // Configurar evento de clic para reproducir la música
+                        document.body.addEventListener('click', function() {
+                            backgroundMusic.play().catch(e => console.log('Error playing background music:', e));
+                        }, { once: true });
+                    });
+                }
+            }
             
             // Actualizar contador de tiempo
             function updateTimeCounter() {
@@ -710,25 +965,71 @@
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((diff % (1000 * 60)) / 1000);
                 
-                document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                document.getElementById('hours').textContent = Math.floor(hours).toString().padStart(2, '0');
-                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                const daysEl = document.getElementById('days');
+                const hoursEl = document.getElementById('hours');
+                const minutesEl = document.getElementById('minutes');
+                const secondsEl = document.getElementById('seconds');
+                
+                if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
+                if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+                if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+                if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
             }
             
-            // Iniciar contador
+            // Iniciar secuencia de animaciones
+            async function startAnimation() {
+                // Esperamos un momento para que todo se cargue
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Mostrar el contenedor del mensaje
+                messageContainer.classList.add('show');
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Escribir título
+                titleEl.classList.add('typing');
+                const titleText = titleEl.textContent;
+                titleEl.textContent = '';
+                await typeWriter(titleEl, titleText, 100, 3); // Velocidad más lenta para el título
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                // Mostrar primer párrafo
+                p1.classList.add('visible');
+                await typeWriter(p1, p1.textContent, 40, 4);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Mostrar segundo párrafo
+                p2.classList.add('visible');
+                await typeWriter(p2, p2.innerText.replace('<br>', '\n'), 40, 4);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Mostrar tercer párrafo
+                p3.classList.add('visible');
+                await typeWriter(p3, p3.textContent, 40, 4);
+                await new Promise(resolve => setTimeout(resolve, 1200));
+                
+                // Ocultar cursor de escritura
+                cursorEl.style.display = 'none';
+                
+                // Crear estrella fugaz hacia el contador y mostrar contador
+                await createCounterShootingStar();
+                timeCounter.classList.add('show');
+                
+                // Iniciar música de fondo después de completar la animación de texto
+                playBackgroundMusic();
+                
+                // Iniciar efecto de estrellas fugaces
+                setInterval(createShootingStar, 5000);
+            }
+            
+            // Iniciar contador de tiempo
             updateTimeCounter();
             setInterval(updateTimeCounter, 1000);
             
-            // Crear estrellas fugaces periódicamente
-            setInterval(createShootingStar, 3000);
+            // Crear destello de estrellas aleatoriamente
+            setInterval(createStarTwinkle, 1200);
             
-            // Ajustar al redimensionar
-            window.addEventListener('resize', function() {
-                const earthMoonSystem = document.querySelector('.earth-moon-system');
-                earthMoonSystem.style.left = '50%';
-                earthMoonSystem.style.top = '50%';
-            });
+            // Iniciar la secuencia de animaciones
+            startAnimation();
         });
     </script>
 </body>
