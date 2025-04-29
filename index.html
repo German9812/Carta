@@ -358,7 +358,7 @@
             margin-top: -32.5px; /* Mitad del tamaño */
             margin-left: -32.5px; /* Mitad del tamaño */
             border-radius: 50%;
-            background-image: url('2k_moon.jpg');
+            background-image: url('https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_1k.jpg');
             background-size: 130px 65px;
             box-shadow: inset 5px -5px 15px rgba(0, 0, 0, 0.4),
                       0 0 30px rgba(200, 200, 200, 0.6);
@@ -703,7 +703,9 @@
             const typingSound = document.getElementById('typingSound');
             const backgroundMusic = document.getElementById('backgroundMusic');
             const timeCounter = document.getElementById('timeCounter');
-            
+           
+            playBackgroundMusic();
+
             // Intenta reproducir el video de la tierra
             function attemptPlayEarthVideo() {
                 if (earthVideo) {
@@ -1013,9 +1015,6 @@
                 // Crear estrella fugaz hacia el contador y mostrar contador
                 await createCounterShootingStar();
                 timeCounter.classList.add('show');
-                
-                // Iniciar música de fondo después de completar la animación de texto
-                playBackgroundMusic();
                 
                 // Iniciar efecto de estrellas fugaces
                 setInterval(createShootingStar, 5000);
