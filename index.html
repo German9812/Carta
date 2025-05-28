@@ -610,6 +610,320 @@
                 font-size: 1rem;
             }
         }
+
+        /* Popup de aviso - Estilo sistema */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        }
+
+        .popup-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 24px;
+            max-width: 420px;
+            width: 90%;
+            text-align: left;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            color: #374151;
+        }
+
+        .popup-overlay.show .popup-content {
+            transform: scale(1);
+        }
+
+        .popup-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .popup-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            color: #f59e0b;
+        }
+
+        .popup-title {
+            font-family: inherit;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+        }
+
+        .popup-message {
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .popup-details {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .popup-date {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #dc2626;
+            margin: 0;
+        }
+
+        .popup-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .popup-button {
+            background: #3b82f6;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .popup-button:hover {
+            background: #2563eb;
+        }
+
+        .popup-button:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        /* Responsive para popup */
+        @media (max-width: 768px) {
+            .popup-content {
+                padding: 20px;
+                max-width: 95%;
+                margin: 16px;
+            }
+
+            .popup-title {
+                font-size: 1rem;
+            }
+
+            .popup-message {
+                font-size: 0.8rem;
+            }
+
+            .popup-date {
+                font-size: 0.8rem;
+            }
+
+            .popup-button {
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Botón de YouTube */
+        .youtube-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff0000;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0.9;
+        }
+
+        .youtube-button:hover {
+            background: #cc0000;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
+            opacity: 1;
+        }
+
+        .youtube-button:hover + .youtube-tooltip {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .youtube-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Tooltip para el botón de YouTube */
+        .youtube-tooltip {
+            position: fixed;
+            bottom: 85px;
+            right: 25px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+            z-index: 999;
+            opacity: 1;
+            visibility: visible;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: pulseTooltip 3s ease-in-out infinite;
+        }
+
+        .youtube-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes pulseTooltip {
+            0%, 100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateY(-3px);
+            }
+        }
+
+        /* Ocultar tooltip después de un tiempo */
+        .youtube-tooltip.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Modal para el video de YouTube */
+        .youtube-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .youtube-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .youtube-container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .youtube-modal.show .youtube-container {
+            transform: scale(1);
+        }
+
+        .youtube-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close-youtube {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-youtube:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive para YouTube */
+        @media (max-width: 768px) {
+            .youtube-button {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+
+            .youtube-container {
+                width: 95%;
+                margin: 20px;
+            }
+
+            .close-youtube {
+                top: -35px;
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -680,12 +994,111 @@
         <p class="time-title">Tiempo desde que iluminaste mi vida</p>
     </div>
     
+    <!-- Popup de aviso -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <div class="popup-header">
+                <svg class="popup-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                <h2 class="popup-title">Aviso del sitio web</h2>
+            </div>
+            <p class="popup-message">
+                Esta página web ha sido programada para darse de baja por decisión de su autor. El contenido dejará de estar disponible en la siguiente fecha y hora:
+            </p>
+            <div class="popup-details">
+                <p class="popup-date">31 de Mayo de 2025 a las 23:59:59</p>
+            </div>
+            <div class="popup-actions">
+                <button class="popup-button" onclick="closePopup()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Botón de YouTube -->
+    <button class="youtube-button" onclick="openYouTube()">
+        <svg class="youtube-icon" viewBox="0 0 24 24">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+        
+    </button>
+    
+    <!-- Tooltip del botón de YouTube -->
+    <div class="youtube-tooltip" id="youtubeTooltip">💫 Escúchame</div>
+    
+    <!-- Modal de YouTube -->
+    <div class="youtube-modal" id="youtubeModal">
+        <div class="youtube-container">
+            <button class="close-youtube" onclick="closeYouTube()">×</button>
+            <iframe class="youtube-iframe" id="youtubeIframe" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+    
     <!-- Audio elementos -->
     <audio id="backgroundMusic" loop autoplay>
         <source src="micancion.mp3" type="audio/mpeg">
     </audio>
     
     <script>
+        // Función para cerrar el popup
+        function closePopup() {
+            const popupOverlay = document.getElementById('popupOverlay');
+            popupOverlay.classList.remove('show');
+        }
+
+        // Funciones para YouTube
+        function openYouTube() {
+            const youtubeModal = document.getElementById('youtubeModal');
+            const youtubeIframe = document.getElementById('youtubeIframe');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const youtubeTooltip = document.getElementById('youtubeTooltip');
+            
+            // Ocultar el tooltip al hacer clic
+            if (youtubeTooltip) {
+                youtubeTooltip.classList.add('hidden');
+            }
+            
+            // Pausar la música de fondo
+            if (backgroundMusic) {
+                backgroundMusic.pause();
+            }
+            
+            // URL del video de YouTube con parámetros para autoplay
+            const videoUrl = 'https://www.youtube.com/embed/abguA7mRQ88?autoplay=1&rel=0&modestbranding=1';
+            youtubeIframe.src = videoUrl;
+            
+            youtubeModal.classList.add('show');
+        }
+
+        function closeYouTube() {
+            const youtubeModal = document.getElementById('youtubeModal');
+            const youtubeIframe = document.getElementById('youtubeIframe');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            
+            // Reanudar la música de fondo
+            if (backgroundMusic) {
+                backgroundMusic.play().catch(() => {});
+            }
+            
+            // Detener el video removiendo el src
+            youtubeIframe.src = '';
+            youtubeModal.classList.remove('show');
+        }
+
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeYouTube();
+            }
+        });
+
+        // Cerrar modal al hacer clic fuera del contenedor
+        document.getElementById('youtubeModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeYouTube();
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const sunVideo = document.querySelector('.sun-video');
             const earthVideo = document.querySelector('.earth-video');
@@ -698,9 +1111,17 @@
             const p4 = document.getElementById('p4');
             const backgroundMusic = document.getElementById('backgroundMusic');
             const timeCounter = document.getElementById('timeCounter');
+            const popupOverlay = document.getElementById('popupOverlay');
            
             // Fecha de inicio (ajusta esta fecha)
             const startDate = new Date('2023-10-23T13:00:00');
+
+            // Mostrar popup al cargar la página
+            function showPopup() {
+                setTimeout(() => {
+                    popupOverlay.classList.add('show');
+                }, 500);
+            }
             
             // Reproducir videos
             function playVideos() {
@@ -884,10 +1305,22 @@
                 setInterval(createShootingStar, 6000);
             }
             
+            // Función para ocultar tooltip después de un tiempo
+            function hideTooltipAfterDelay() {
+                const youtubeTooltip = document.getElementById('youtubeTooltip');
+                if (youtubeTooltip) {
+                    setTimeout(() => {
+                        youtubeTooltip.classList.add('hidden');
+                    }, 45000); // Ocultar después de 45 segundos
+                }
+            }
+            
             // Inicializar todo
             createStars();
             playVideos();
             playBackgroundMusic();
+            showPopup(); // Mostrar popup al cargar
+            hideTooltipAfterDelay(); // Ocultar tooltip después de un tiempo
             
             // Eventos de interacción
             document.body.addEventListener('click', playVideos);
