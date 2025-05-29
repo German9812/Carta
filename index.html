@@ -31,6 +31,224 @@
             position: relative;
         }
 
+        /* Video de introducción del ojo */
+        .intro-video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            background: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .intro-video-container.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .intro-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1);
+            transition: transform 2s ease-in-out;
+        }
+
+        .intro-video.zoom-in {
+            transform: scale(2.5);
+        }
+
+        .intro-video.final-zoom {
+            transform: scale(4);
+        }
+
+        /* Contenedor principal oculto inicialmente */
+        .main-content {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 2s ease, visibility 2s ease;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Efecto de viaje a velocidad luz */
+        .lightspeed-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: radial-gradient(ellipse at center,
+                transparent 0%,
+                rgba(0, 0, 0, 0.3) 30%,
+                rgba(0, 0, 0, 0.8) 70%,
+                rgba(0, 0, 0, 1) 100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .lightspeed-transition.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Estrellas de velocidad que vienen hacia nosotros (efecto profundidad) */
+        .speed-star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: speedStar var(--duration) linear infinite;
+        }
+
+        @keyframes speedStar {
+            0% {
+                opacity: 0;
+                transform: scale(0.1) translate(var(--start-x), var(--start-y));
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(20) translate(var(--end-x), var(--end-y));
+            }
+        }
+
+        /* Por defecto los elementos espaciales empiezan invisibles (sobrescribe los estilos originales) */
+        .main-content .sun-container {
+            width: 0px !important;
+            height: 0px !important;
+            opacity: 0 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content .earth-container {
+            width: 0px !important;
+            height: 0px !important;
+            opacity: 0 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content .moon-orbit {
+            width: 0px !important;
+            height: 0px !important;
+            margin-top: 0px !important;
+            margin-left: 0px !important;
+            opacity: 0 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content .moon {
+            width: 0px !important;
+            height: 0px !important;
+            margin-top: 0px !important;
+            margin-left: 0px !important;
+            opacity: 0 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content .stars {
+            opacity: 0 !important;
+            transition: opacity 3s ease-in-out;
+        }
+
+        /* Estados intermedios - aparecen como puntos pequeños */
+        .main-content.approaching .sun-container {
+            width: 10px !important;
+            height: 10px !important;
+            opacity: 0.5 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content.approaching .earth-container {
+            width: 20px !important;
+            height: 20px !important;
+            opacity: 0.5 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content.approaching .moon-orbit {
+            width: 25px !important;
+            height: 25px !important;
+            margin-top: -12.5px !important;
+            margin-left: -12.5px !important;
+            opacity: 0.5 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content.approaching .moon {
+            width: 5px !important;
+            height: 5px !important;
+            margin-top: -2.5px !important;
+            margin-left: -2.5px !important;
+            opacity: 0.5 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Las estrellas aparecen junto con los planetas pequeños */
+        .main-content.approaching .stars {
+            opacity: 0.3 !important;
+            transition: opacity 3s ease-in-out;
+        }
+
+        /* Estados finales - tamaños normales (los originales del CSS) */
+        .main-content.arrived .sun-container {
+            width: 100px !important;
+            height: 100px !important;
+            opacity: 1 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content.arrived .earth-container {
+            width: 280px !important;
+            height: 280px !important;
+            opacity: 1 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content.arrived .moon-orbit {
+            width: 300px !important;
+            height: 300px !important;
+            margin-top: -150px !important;
+            margin-left: -150px !important;
+            opacity: 1 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .main-content.arrived .moon {
+            width: 60px !important;
+            height: 60px !important;
+            margin-top: -30px !important;
+            margin-left: -30px !important;
+            opacity: 1 !important;
+            transition: all 5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Las estrellas llegan a opacidad completa junto con los planetas */
+        .main-content.arrived .stars {
+            opacity: 1 !important;
+            transition: opacity 3s ease-in-out;
+        }
+
         /* Contenedor del Sol - Minimalista */
         .sun-container {
             position: fixed;
@@ -611,495 +829,98 @@
             }
         }
 
-        /* Popup de aviso - Estilo sistema */
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-        }
-
-        .popup-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .popup-content {
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            padding: 24px;
-            max-width: 420px;
-            width: 90%;
-            text-align: left;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
-            color: #374151;
-        }
-
-        .popup-overlay.show .popup-content {
-            transform: scale(1);
-        }
-
-        .popup-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .popup-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-            color: #f59e0b;
-        }
-
-        .popup-title {
-            font-family: inherit;
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #111827;
-            margin: 0;
-        }
-
-        .popup-message {
-            font-size: 0.875rem;
-            line-height: 1.5;
-            color: #6b7280;
-            margin-bottom: 16px;
-        }
-
-        .popup-details {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 20px;
-        }
-
-        .popup-date {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #dc2626;
-            margin: 0;
-        }
-
-        .popup-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-
-        .popup-button {
-            background: #3b82f6;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            color: white;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-
-        .popup-button:hover {
-            background: #2563eb;
-        }
-
-        .popup-button:focus {
-            outline: 2px solid #3b82f6;
-            outline-offset: 2px;
-        }
-
-        /* Responsive para popup */
-        @media (max-width: 768px) {
-            .popup-content {
-                padding: 20px;
-                max-width: 95%;
-                margin: 16px;
-            }
-
-            .popup-title {
-                font-size: 1rem;
-            }
-
-            .popup-message {
-                font-size: 0.8rem;
-            }
-
-            .popup-date {
-                font-size: 0.8rem;
-            }
-
-            .popup-button {
-                padding: 10px 16px;
-                font-size: 0.8rem;
-            }
-        }
-
-        /* Botón de YouTube */
-        .youtube-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #ff0000;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 20px;
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-            z-index: 1000;
-            opacity: 0.9;
-        }
-
-        .youtube-button:hover {
-            background: #cc0000;
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
-            opacity: 1;
-        }
-
-        .youtube-button:hover + .youtube-tooltip {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .youtube-icon {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        /* Tooltip para el botón de YouTube */
-        .youtube-tooltip {
-            position: fixed;
-            bottom: 85px;
-            right: 25px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            white-space: nowrap;
-            z-index: 999;
-            opacity: 1;
-            visibility: visible;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: pulseTooltip 3s ease-in-out infinite;
-        }
-
-        .youtube-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: rgba(0, 0, 0, 0.8);
-        }
-
-        @keyframes pulseTooltip {
-            0%, 100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            50% {
-                opacity: 0.7;
-                transform: translateY(-3px);
-            }
-        }
-
-        /* Ocultar tooltip después de un tiempo */
-        .youtube-tooltip.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        /* Modal para el video de YouTube */
-        .youtube-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .youtube-modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .youtube-container {
-            position: relative;
-            width: 90%;
-            max-width: 800px;
-            aspect-ratio: 16/9;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            transform: scale(0.8);
-            transition: transform 0.3s ease;
-        }
-
-        .youtube-modal.show .youtube-container {
-            transform: scale(1);
-        }
-
-        .youtube-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .close-youtube {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .close-youtube:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* Responsive para YouTube */
-        @media (max-width: 768px) {
-            .youtube-button {
-                bottom: 15px;
-                right: 15px;
-                padding: 10px 16px;
-                font-size: 0.8rem;
-            }
-
-            .youtube-container {
-                width: 95%;
-                margin: 20px;
-            }
-
-            .close-youtube {
-                top: -35px;
-                width: 35px;
-                height: 35px;
-                font-size: 18px;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Luz ambiental del sol -->
-    <div class="ambient-light"></div>
-    
-    <!-- Estrellas de fondo -->
-    <div class="stars" id="stars"></div>
-    
-    <!-- Sol con video girando -->
-    <div class="sun-container">
-        <div class="sun-video-wrapper">
-            <video class="sun-video" autoplay loop muted playsinline>
-                <source src="sol-girando.mp4" type="video/mp4">
-            </video>
-        </div>
+    <!-- Video de introducción del ojo -->
+    <div class="intro-video-container" id="introContainer">
+        <video class="intro-video" id="introVideo" muted playsinline>
+            <source src="video.mp4" type="video/mp4">
+        </video>
     </div>
-    
-    <!-- Sistema Tierra-Luna -->
-    <div class="space-container">
-        <div class="earth-moon-system">
-            <div class="earth-container">
-                <div class="earth-video-container">
-                    <video class="earth-video" autoplay loop muted playsinline>
-                        <source src="tierra-girando.mp4" type="video/mp4">
-                    </video>
-                    <div class="earth-atmosphere"></div>
-                </div>
-                <div class="clouds"></div>
-            </div>
-            
-            <div class="moon-orbit">
-                <div class="moon"></div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Mensaje flotante menos invasivo -->
-    <div class="message-container">
-        <div class="message" id="message">
-            <h1 id="title">Jessica Andrea Jaramillo Patiño<span class="typing-cursor" id="cursor"></span></h1>
-            <p id="p1">Entre infinitas posibilidades, te conocí y aprendí a amarte como nunca he amado</p>
-            <p id="p2">Tal vez hoy ya no esté en tu vida, pero aún te sigo amando</p>
-            <p id="p3">Deseo que tengas una vida tan maravillosa como lo eres tú ✨</p>
-        </div>
-    </div>
-    
-    <!-- Contador de tiempo mejorado -->
-    <div class="time-counter" id="timeCounter">
-        <div class="time-wrapper">
-            <div class="time-group">
-                <span id="days" class="time-value">00</span>
-                <span class="time-label">Días</span>
-            </div>
-            <div class="time-group">
-                <span id="hours" class="time-value">00</span>
-                <span class="time-label">Horas</span>
-            </div>
-            <div class="time-group">
-                <span id="minutes" class="time-value">00</span>
-                <span class="time-label">Min</span>
-            </div>
-            <div class="time-group">
-                <span id="seconds" class="time-value">00</span>
-                <span class="time-label">Seg</span>
-            </div>
-        </div>
-        <p class="time-title">Tiempo desde que iluminaste mi vida</p>
-    </div>
-    
-    <!-- Popup de aviso -->
-    <div class="popup-overlay" id="popupOverlay">
-        <div class="popup-content">
-            <div class="popup-header">
-                <svg class="popup-icon" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                </svg>
-                <h2 class="popup-title">Aviso del sitio web</h2>
-            </div>
-            <p class="popup-message">
-                Esta página web ha sido programada para darse de baja por decisión de su autor. El contenido dejará de estar disponible en la siguiente fecha y hora:
-            </p>
-            <div class="popup-details">
-                <p class="popup-date">31 de Mayo de 2025 a las 23:59:59</p>
-            </div>
-            <div class="popup-actions">
-                <button class="popup-button" onclick="closePopup()">Aceptar</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Botón de YouTube -->
-    <button class="youtube-button" onclick="openYouTube()">
-        <svg class="youtube-icon" viewBox="0 0 24 24">
-            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-        </svg>
+
+    <!-- Efecto de viaje a velocidad luz -->
+    <div class="lightspeed-transition" id="lightspeedTransition"></div>
+
+    <!-- Contenido principal -->
+    <div class="main-content" id="mainContent">
+        <!-- Luz ambiental del sol -->
+        <div class="ambient-light"></div>
         
-    </button>
-    
-    <!-- Tooltip del botón de YouTube -->
-    <div class="youtube-tooltip" id="youtubeTooltip">💫 Escúchame</div>
-    
-    <!-- Modal de YouTube -->
-    <div class="youtube-modal" id="youtubeModal">
-        <div class="youtube-container">
-            <button class="close-youtube" onclick="closeYouTube()">×</button>
-            <iframe class="youtube-iframe" id="youtubeIframe" src="" frameborder="0" allowfullscreen></iframe>
+        <!-- Estrellas de fondo -->
+        <div class="stars" id="stars"></div>
+        
+        <!-- Sol con video girando -->
+        <div class="sun-container">
+            <div class="sun-video-wrapper">
+                <video class="sun-video" autoplay loop muted playsinline>
+                    <source src="sol-girando.mp4" type="video/mp4">
+                </video>
+            </div>
         </div>
+        
+        <!-- Sistema Tierra-Luna -->
+        <div class="space-container">
+            <div class="earth-moon-system">
+                <div class="earth-container">
+                    <div class="earth-video-container">
+                        <video class="earth-video" autoplay loop muted playsinline>
+                            <source src="tierra-girando.mp4" type="video/mp4">
+                        </video>
+                        <div class="earth-atmosphere"></div>
+                    </div>
+                    <div class="clouds"></div>
+                </div>
+                
+                <div class="moon-orbit">
+                    <div class="moon"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mensaje flotante menos invasivo -->
+        <div class="message-container">
+            <div class="message" id="message">
+                <h1 id="title">Jessica Andrea Jaramillo Patiño<span class="typing-cursor" id="cursor"></span></h1>
+                <p id="p1">Entre infinitas posibilidades, te conocí y aprendí a amarte como nunca he amado</p>
+                <p id="p2">Tal vez hoy ya no esté en tu vida, pero aún te sigo amando</p>
+                <p id="p3">Deseo que tengas una vida tan maravillosa como lo eres tú ✨</p>
+            </div>
+        </div>
+        
+        <!-- Contador de tiempo mejorado -->
+        <div class="time-counter" id="timeCounter">
+            <div class="time-wrapper">
+                <div class="time-group">
+                    <span id="days" class="time-value">00</span>
+                    <span class="time-label">Días</span>
+                </div>
+                <div class="time-group">
+                    <span id="hours" class="time-value">00</span>
+                    <span class="time-label">Horas</span>
+                </div>
+                <div class="time-group">
+                    <span id="minutes" class="time-value">00</span>
+                    <span class="time-label">Min</span>
+                </div>
+                <div class="time-group">
+                    <span id="seconds" class="time-value">00</span>
+                    <span class="time-label">Seg</span>
+                </div>
+            </div>
+            <p class="time-title">Tiempo desde que iluminaste mi vida</p>
+        </div>
+        <!-- Audio elementos -->
+        <audio id="backgroundMusic" loop autoplay>
+            <source src="micancion.mp3" type="audio/mpeg">
+        </audio>
     </div>
-    
-    <!-- Audio elementos -->
-    <audio id="backgroundMusic" loop autoplay>
-        <source src="micancion.mp3" type="audio/mpeg">
-    </audio>
     
     <script>
-        // Función para cerrar el popup
-        function closePopup() {
-            const popupOverlay = document.getElementById('popupOverlay');
-            popupOverlay.classList.remove('show');
-        }
-
-        // Funciones para YouTube
-        function openYouTube() {
-            const youtubeModal = document.getElementById('youtubeModal');
-            const youtubeIframe = document.getElementById('youtubeIframe');
-            const backgroundMusic = document.getElementById('backgroundMusic');
-            const youtubeTooltip = document.getElementById('youtubeTooltip');
-            
-            // Ocultar el tooltip al hacer clic
-            if (youtubeTooltip) {
-                youtubeTooltip.classList.add('hidden');
-            }
-            
-            // Pausar la música de fondo
-            if (backgroundMusic) {
-                backgroundMusic.pause();
-            }
-            
-            // URL del video de YouTube con parámetros para autoplay
-            const videoUrl = 'https://www.youtube.com/embed/abguA7mRQ88?autoplay=1&rel=0&modestbranding=1';
-            youtubeIframe.src = videoUrl;
-            
-            youtubeModal.classList.add('show');
-        }
-
-        function closeYouTube() {
-            const youtubeModal = document.getElementById('youtubeModal');
-            const youtubeIframe = document.getElementById('youtubeIframe');
-            const backgroundMusic = document.getElementById('backgroundMusic');
-            
-            // Reanudar la música de fondo
-            if (backgroundMusic) {
-                backgroundMusic.play().catch(() => {});
-            }
-            
-            // Detener el video removiendo el src
-            youtubeIframe.src = '';
-            youtubeModal.classList.remove('show');
-        }
-
-        // Cerrar modal con tecla Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeYouTube();
-            }
-        });
-
-        // Cerrar modal al hacer clic fuera del contenedor
-        document.getElementById('youtubeModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeYouTube();
-            }
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
+            const introContainer = document.getElementById('introContainer');
+            const introVideo = document.getElementById('introVideo');
+            const mainContent = document.getElementById('mainContent');
             const sunVideo = document.querySelector('.sun-video');
             const earthVideo = document.querySelector('.earth-video');
             const messageContainer = document.getElementById('message');
@@ -1111,16 +932,153 @@
             const p4 = document.getElementById('p4');
             const backgroundMusic = document.getElementById('backgroundMusic');
             const timeCounter = document.getElementById('timeCounter');
-            const popupOverlay = document.getElementById('popupOverlay');
            
             // Fecha de inicio (ajusta esta fecha)
             const startDate = new Date('2023-10-23T13:00:00');
 
-            // Mostrar popup al cargar la página
-            function showPopup() {
+            // Función para crear estrellas que vienen hacia nosotros (efecto profundidad)
+            function createSpeedStars() {
+                const lightspeedContainer = document.getElementById('lightspeedTransition');
+                const starCount = 200;
+                
+                for (let i = 0; i < starCount; i++) {
+                    const star = document.createElement('div');
+                    star.classList.add('speed-star');
+                    
+                    // Posición inicial en el centro de la pantalla (punto de fuga)
+                    const centerX = 50;
+                    const centerY = 50;
+                    
+                    // Dirección aleatoria desde el centro hacia los bordes
+                    const angle = Math.random() * 2 * Math.PI;
+                    const distance = 50 + Math.random() * 50; // Distancia final desde el centro
+                    
+                    const endX = centerX + Math.cos(angle) * distance;
+                    const endY = centerY + Math.sin(angle) * distance;
+                    
+                    // Tamaño inicial muy pequeño
+                    const initialSize = 0.5 + Math.random() * 1;
+                    
+                    // Duración aleatoria
+                    const duration = 1 + Math.random() * 2;
+                    
+                    // Retraso aleatorio
+                    const delay = Math.random() * 3;
+                    
+                    star.style.left = `${centerX}%`;
+                    star.style.top = `${centerY}%`;
+                    star.style.width = `${initialSize}px`;
+                    star.style.height = `${initialSize}px`;
+                    star.style.setProperty('--duration', `${duration}s`);
+                    star.style.setProperty('--start-x', '0px');
+                    star.style.setProperty('--start-y', '0px');
+                    star.style.setProperty('--end-x', `${(endX - centerX) * 10}px`);
+                    star.style.setProperty('--end-y', `${(endY - centerY) * 10}px`);
+                    star.style.animationDelay = `${delay}s`;
+                    
+                    lightspeedContainer.appendChild(star);
+                }
+                
+                // Limpiar las estrellas después de 6 segundos
                 setTimeout(() => {
-                    popupOverlay.classList.add('show');
-                }, 500);
+                    lightspeedContainer.innerHTML = '';
+                }, 6000);
+            }
+
+            // Función para animar la llegada espacial en fases (más rápida)
+            function animateSpaceArrival() {
+                return new Promise((resolve) => {
+                    console.log('Iniciando animación de llegada espacial');
+                    console.log('Estado inicial - clases del mainContent:', mainContent.className);
+                    
+                    // Fase 1: Los elementos ya están invisibles por el CSS por defecto
+                    
+                    // Fase 2: Después de 1 segundo, aparecen como puntos pequeños
+                    setTimeout(() => {
+                        console.log('Fase 2: Apareciendo como puntos pequeños');
+                        mainContent.classList.add('approaching');
+                        console.log('Clases después de agregar approaching:', mainContent.className);
+                        
+                        // Fase 3: Después de 2 segundos más, crecen a tamaño normal
+                        setTimeout(() => {
+                            console.log('Fase 3: Creciendo a tamaño normal');
+                            mainContent.classList.remove('approaching');
+                            mainContent.classList.add('arrived');
+                            console.log('Clases después de agregar arrived:', mainContent.className);
+                            
+                            // Esperar a que termine la transición final (más corta)
+                            setTimeout(() => {
+                                console.log('Animación de llegada completada');
+                                resolve();
+                            }, 5000); // Tiempo de la transición final reducido
+                        }, 2000); // Tiempo como puntos pequeños reducido
+                    }, 1000); // Tiempo invisible inicial reducido
+                });
+            }
+
+            // Función para manejar la secuencia del video del ojo
+            function handleIntroSequence() {
+                return new Promise((resolve) => {
+                    const lightspeedTransition = document.getElementById('lightspeedTransition');
+                    
+                    // Reproducir el video del ojo
+                    introVideo.play().then(() => {
+                        console.log('Video del ojo iniciado');
+                        
+                        // Escuchar cuando el video esté cerca del final para hacer el zoom adicional
+                        introVideo.addEventListener('timeupdate', function onTimeUpdate() {
+                            const duration = introVideo.duration;
+                            const currentTime = introVideo.currentTime;
+                            
+                            // Cuando falten 3 segundos, hacer primer zoom
+                            if (duration - currentTime <= 3 && !introVideo.classList.contains('zoom-in')) {
+                                introVideo.classList.add('zoom-in');
+                            }
+                            
+                            // Cuando falte 1 segundo, hacer zoom final más intenso
+                            if (duration - currentTime <= 1 && !introVideo.classList.contains('final-zoom')) {
+                                introVideo.classList.add('final-zoom');
+                            }
+                        });
+                        
+                        // Cuando el video termine, iniciar viaje espacial
+                        introVideo.addEventListener('ended', async function() {
+                            console.log('Video terminado, iniciando secuencia espacial');
+                            
+                            // Ocultar el video del ojo
+                            introContainer.classList.add('hidden');
+                            
+                            // Crear estrellas de velocidad que vienen hacia nosotros
+                            createSpeedStars();
+                            
+                            // Activar efecto de velocidad luz
+                            lightspeedTransition.classList.add('active');
+                            
+                            // Mostrar el contenido principal con elementos muy pequeños
+                            mainContent.classList.add('visible');
+                            
+                            // Esperar un momento antes de iniciar la llegada
+                            setTimeout(async () => {
+                                // Animar la llegada desde el espacio (elementos crecen)
+                                await animateSpaceArrival();
+                                
+                                // Ocultar efecto de velocidad luz gradualmente
+                                lightspeedTransition.classList.remove('active');
+                                
+                                setTimeout(() => {
+                                    resolve();
+                                }, 1000);
+                            }, 1000);
+                        });
+                        
+                    }).catch((error) => {
+                        console.log('Error reproduciendo video del ojo:', error);
+                        // Si hay error, ir directamente al contenido principal
+                        introContainer.classList.add('hidden');
+                        mainContent.classList.add('visible');
+                        resolve();
+                    });
+                });
             }
             
             // Reproducir videos
@@ -1305,31 +1263,43 @@
                 setInterval(createShootingStar, 6000);
             }
             
-            // Función para ocultar tooltip después de un tiempo
-            function hideTooltipAfterDelay() {
-                const youtubeTooltip = document.getElementById('youtubeTooltip');
-                if (youtubeTooltip) {
-                    setTimeout(() => {
-                        youtubeTooltip.classList.add('hidden');
-                    }, 45000); // Ocultar después de 45 segundos
+            // Función para inicializar el contenido principal
+            async function initializeMainContent() {
+                createStars();
+                playVideos();
+                playBackgroundMusic();
+                
+                // Eventos de interacción
+                document.body.addEventListener('click', playVideos);
+                document.body.addEventListener('touchstart', playVideos, {once: true});
+                
+                // Iniciar contador y animaciones
+                updateTimeCounter();
+                setInterval(updateTimeCounter, 1000);
+                
+                // Pequeña pausa antes de iniciar las animaciones de texto
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                startAnimation();
+            }
+            
+            // Secuencia principal: primero el video del ojo, luego el contenido
+            async function initializeApp() {
+                try {
+                    // Primero reproducir la secuencia del video del ojo
+                    await handleIntroSequence();
+                    
+                    // Después inicializar el contenido principal
+                    await initializeMainContent();
+                } catch (error) {
+                    console.log('Error en la inicialización:', error);
+                    // En caso de error, mostrar directamente el contenido principal
+                    mainContent.classList.add('visible');
+                    await initializeMainContent();
                 }
             }
             
-            // Inicializar todo
-            createStars();
-            playVideos();
-            playBackgroundMusic();
-            showPopup(); // Mostrar popup al cargar
-            hideTooltipAfterDelay(); // Ocultar tooltip después de un tiempo
-            
-            // Eventos de interacción
-            document.body.addEventListener('click', playVideos);
-            document.body.addEventListener('touchstart', playVideos, {once: true});
-            
-            // Iniciar contador y animaciones
-            updateTimeCounter();
-            setInterval(updateTimeCounter, 1000);
-            startAnimation();
+            // Inicializar la aplicación
+            initializeApp();
         });
     </script>
 </body>
